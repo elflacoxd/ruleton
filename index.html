@@ -138,13 +138,13 @@ fetch("presets.json")
     }
   });
     
-    if (preset1) {
-      select.value = preset1;
-      cambiarPreset(preset1);
+    if (primerNombre) {
+      select.value = primerNombre;
+      cambiarPreset(primerNombre);
     }
   });
 
-function cambiarPreset(nombre) {
+    function cambiarPreset(nombre) {
   if (opcionesPredefinidas[nombre]) {
     const textarea = document.getElementById("opciones");
     textarea.value = opcionesPredefinidas[nombre].join(", ");
