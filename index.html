@@ -192,18 +192,22 @@ function cambiarPreset(nombre) {
           }
         });
 
+let voices = [];
+const voiceSelect = document.getElementById("voiceSelect");
 
+function cargarVoces() {
+  voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith("es"));
+  voiceSelect.innerHTML = "";
+  voices.forEach((v, i) => {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = `${v.name} (${v.lang})`;
+    voiceSelect.appendChild(option);
+  });
+}
 
-    function cargarVoces() {
-      voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith("es"));
-      voiceSelect.innerHTML = "";
-      voices.forEach((v, i) => {
-        const option = document.createElement("option");
-        option.value = i;
-        option.textContent = `${v.name} (${v.lang})`;
-        voiceSelect.appendChild(option);
-      });
-    }
+cargarVoces();
+speechSynthesis.onvoiceschanged = cargarVoces;
 
     function elegirOpciones() {
       const bobPoronga = document.getElementById("bob");
