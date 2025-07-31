@@ -130,7 +130,10 @@ fetch("presets.json")
   .then(data => {
     opcionesPredefinidas = data;
     const select = document.getElementById("presetSelect");
+    
+    let primerNombre = null;
     for (const nombre in opcionesPredefinidas) {
+      if (!primerNombre) primerNombre = nombre
       const option = document.createElement("option");
       option.value = nombre;
       option.textContent = nombre;
@@ -198,7 +201,6 @@ fetch("presets.json")
         });
 
 const voiceSelect = document.getElementById("voiceSelect");
-
 function cargarVoces() {
   voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith("es"));
   voiceSelect.innerHTML = "";
