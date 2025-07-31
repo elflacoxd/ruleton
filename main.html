@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>chingaderas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+      background-color: #202021;
+      color: #827154;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    textarea {
+      width: 80%;
+      height: 171px;
+      font-size: 16px;
+      background-color: #303030;
+      color: #827154;
+      border: 1px solid #444;
+    }
+    input[type="number"], select, input[type="range"] {
+      font-size: 16px;
+      margin: 5px;
+    }
+    button {
+      margin-top: 20px;
+      font-size: 18px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    #resultado {
+      margin-top: 30px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .top-right {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .controls {
+      margin-top: 10px;
+    }
+    .light-mode {
+      background-color: #f0f8ff;
+      color: #000;
+    }
+    .light-mode textarea {
+      background-color: #fff;
+      color: #000;
+      border: 1px solid #ccc;
+    }
+    #imagen-movil {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 300px;
+      transform: scale(calc(1 / var(--zoom-factor, 1)));
+      transform-origin: bottom right;
+      will-change: transform;
+      z-index: 9999;
+      animation: haciaCentro 2s ease-out forwards;
+    }
+     #pinche-pendejo {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 200px;
+      transform: scale(calc(1 / var(--zoom-factor, 1)));
+      transform-origin: bottom left;
+      will-change: transform;
+      z-index: 9999;
+      animation: haciaCentro 2s ease-out forwards;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="top-right">
+    <button style="background-color: #00000000; color: #876445; border-color: #00000000;" button onclick="toggleTheme()">🌙/☀️</button>
+  </div>
+
+  <h1><span id="gato">🐈‍⬛</span> chingadera para elegir chingaderas alazar</h1>
+  <p>Opciones (separadas por comas):</p>
+  <textarea id="opciones"></textarea>
+  <br><br>
+  <label for="cantidad">¿Cuántas chingaderas elegir?</label>
+  <input style="background-color: #10ac858b; color: #ffb030;" input type="number" id="cantidad" min="1" value="1">
+
+  <div class="controls">
+    <input type="range" id="volumen" min="0" max="1.5" step="0.01" value="1">
+    <select style="background-color: #10ac858b; color: #ffb030;" select id="voiceSelect"></select>
+  </div>
+
+  <button style="background-color: #10ac858b; color: #ffb030;" button onclick="elegirOpciones()">Picamela</button>
+
+  <div id="resultado"></div>
+
+  <img src="https://cdn.discordapp.com/attachments/1177355673890201671/1399836914479140945/30_sin_titulo_20240609151305.png?ex=688a7338&is=688921b8&hm=3aa1340a6a8f5f89507912d3afdca92ff1c98a7e7f3588a9ce6dd3192b0ec290&" id="imagen-movil" style="cursor: pointer;">
+    <img src="https://cdn.7tv.app/emote/01JB0G5R1FY3NTAVG8CK3YCVCB/4x.avif" id="pinche-pendejo" style="cursor: pointer;">
+
+    <audio id="sonido">
+      <source src="https://cdn.discordapp.com/attachments/1177355673890201671/1399842674000793870/Pawma_1.mp3?ex=688a7895&is=68892715&hm=46eb5ad777a2bf6b940d5f6f563e48fe93a5f7cf1fb4a3bc047da88ac6c6bbde&" type="audio/mpeg">
+    
+        <audio id="sonido-gato">
+           <source src="https://cdn.discordapp.com/attachments/1177355673890201671/1399850720018174002/gatooooo.ogg?ex=688a8013&is=68892e93&hm=02674e39e1aaa3b55c0f0ec08c6154184431c58c29cbe36a2bea75de3c385f09&" type="audio/mpeg"> 
+
+              <audio id="pendejo">
+                <source src="https://cdn.discordapp.com/attachments/1177355673890201671/1399882716291534978/pinchependejo.mp3?ex=688a9de0&is=68894c60&hm=7ff272c7dbe8a8cbea593b8759472e8173b14d8dd83285549b52d68f068c37fa&" type="audio/mpeg"> 
+                  <audio id="bob">
+                     <source src="https://cdn.discordapp.com/attachments/1177355673890201671/1399890630137614417/bob_poronga.ogg?ex=688aa53e&is=688953be&hm=5a159e9ed12b7738c09fa94ef1128bdf09d549f8d794512082ebc797a2f90121&" type="audio/mpeg"> 
+
+  <script>
+    // Lista de opciones predefinidas
+    const opcionesPredefinidas = [
+        "absol",
+        "ardillota",
+        "armarouge",
+        "ay mister maim",
+        "ay snorlas",
+        "azumais",
+        "blastos",
+        "blazzercken",
+        "blisi",
+        "bodrio",
+        "caballo omosesual delas montañas",
+        "cerraora",
+        "chandelurs",
+        "chaneke",
+        "chari-pocion",
+        "chiclosa",
+        "chupadora",
+        "cindesex",
+        "clefa",
+        "cramoran",
+        "crustacio cascarudo",
+        "cumfi",
+        "delfos",
+        "dragonais",
+        "durnalgon",
+        "el mamo",
+        "eldedGOGOGO",
+        "espion",
+        "falinks",
+        "fierrudo",
+        "garchon de tierra",
+        "gardevoid",
+        "gayardos",
+        "glazioin",
+        "grenigga",
+        "gudrosa",
+        "hoo-too",
+        "jupa",
+        "lapras",
+        "latios",
+        "lifion",
+        "lucario",
+        "machamp",
+        "main gata desde la beta",
+        "metamelgrueso",
+        "miraidon",
+        "miu",
+        "miutu-X",
+        "miutu-Y", 
+        "naintels",
+        "Narkrai",
+        "Nceruledge",
+        "Nengar",
+        "Numbreon",
+        "Nzoroark",
+        "patadas locas",
+        "pistacho de alola",
+        "pistachu oscuro",
+        "pistachus",
+        "psidick",
+        "sexczor",
+        "silbeon",
+        "sniper monki vercion veracruz",
+        "sniper monki vercion yucateca",
+        "soicuno",
+        "talonflamas",
+        "tinkaton",
+        "tiranitar jungla",
+        "tragacum",
+        "troncosote",
+        "urchifu",
+        "venosa",
+        "willytuf",
+        "zaciano",
+         ];
+
+
+    const voiceSelect = document.getElementById("voiceSelect");
+    const volumenSlider = document.getElementById("volumen");
+    let voices = [];
+    let currentUtterance;
+    let ttsTimeout = null;
+
+    window.onload = () => {
+      document.getElementById('opciones').value = opcionesPredefinidas.join(', ');
+      cargarVoces();
+      if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = cargarVoces;
+      }
+    };
+
+
+      function actualizarZoomFactor() {
+    const zoom = window.outerWidth / window.innerWidth;
+    document.documentElement.style.setProperty('--zoom-factor', zoom);
+  }
+
+  // Ejecutar al cargar y al cambiar el tamaño
+  actualizarZoomFactor();
+  window.addEventListener('resize', actualizarZoomFactor);
+
+
+  const img = document.getElementById('imagen-movil');
+  const audio = document.getElementById('sonido');
+
+  img.addEventListener('click', () => {
+    audio.currentTime = 0; // reinicia desde el inicio
+    audio.play();
+  });
+
+        document.getElementById("gato").addEventListener("click", () => {
+      const audioGato = document.getElementById("sonido-gato");
+      audioGato.volume = 0.2;
+      audioGato.currentTime = 0;
+      audioGato.play();
+    });
+
+          const pinchePendejo = document.getElementById("pendejo"); // tu elemento <audio>
+          let reproduciendo = false;
+
+        document.getElementById("pinche-pendejo").addEventListener("click", () => {
+          if (!reproduciendo) {
+            pinchePendejo.currentTime = 0;
+            pinchePendejo.volume = 0.5;
+            pinchePendejo.play();
+            reproduciendo = true;
+          } else {
+            pinchePendejo.pause();
+            pinchePendejo.currentTime = 0;
+            reproduciendo = false;
+          }
+        });
+
+
+
+    function cargarVoces() {
+      voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith("es"));
+      voiceSelect.innerHTML = "";
+      voices.forEach((v, i) => {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = `${v.name} (${v.lang})`;
+        voiceSelect.appendChild(option);
+      });
+    }
+
+    function elegirOpciones() {
+      const bobPoronga = document.getElementById("bob");
+      const texto = document.getElementById('opciones').value.trim();
+      const cantidad = parseInt(document.getElementById('cantidad').value);
+    
+            
+      bobPoronga.currentTime = 0;
+      bobPoronga.play();
+
+      if (!texto) {
+        alert("❗ Por favor, escribe al menos una opción.");
+        return;
+      }
+
+      let opciones = texto.split(',').map(op => op.trim()).filter(op => op !== '');
+      if (opciones.length === 0) {
+        alert("❗ No hay opciones válidas.");
+        return;
+      }
+
+      if (cantidad > opciones.length) {
+        alert(`❗ Solo hay ${opciones.length} opciones. No puedes elegir ${cantidad}.`);
+        return;
+      }
+        
+      // Detener TTS anterior si está activo
+      if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+      }
+      if (ttsTimeout) {
+           clearTimeout(ttsTimeout);
+            ttsTimeout = null;
+        speechSynthesis.cancel();
+      }
+      
+      opciones = opciones.sort(() => 0.5 - Math.random());
+      const elegidas = opciones.slice(0, cantidad);
+
+      const resultadoTexto = elegidas.map((op, i) => `${i + 1}. ${op}`).join('<br>');
+      document.getElementById('resultado').innerHTML = `✅ chingaderas elegidas:<br>${resultadoTexto}`;
+
+      // Generar texto hablado
+      let mensajeTexto = "  chingaderas para elegir, ";
+      if (elegidas.length === 1) {
+        mensajeTexto += elegidas[0];
+      } else {
+        const todasMenosUltima = elegidas.slice(0, -1).join(",, ");
+        const ultima = elegidas[elegidas.length - 1];
+        mensajeTexto += `${todasMenosUltima},, o, ${ultima}`;
+      }
+
+      currentUtterance = new SpeechSynthesisUtterance(mensajeTexto);
+      currentUtterance.lang = voices.length > 0 ? voices[voiceSelect.value].lang : "es-ES";
+      currentUtterance.voice = voices[voiceSelect.value];
+      currentUtterance.volume = parseFloat(volumenSlider.value);
+     ttsTimeout = setTimeout(() => {
+    speechSynthesis.speak(currentUtterance);
+    ttsTimeout = null;
+  }, 555); // cooldown en ms
+}  
+
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+    }
+  </script>
+</body>
+</html>
