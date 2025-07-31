@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>chingaderas</title>
+  
+  <label for="presetSelect">Select an preset:</label>
+<select style="background-color: #10ac858b; color: #ffb030;" id="presetSelect" onchange="cambiarPreset(this.value)">
+  <option value=""> Presets </option>
+</select>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -115,15 +121,29 @@
   <script>
 
     
-let opcionesPredefinidas = [];
 
-fetch("opciones.json")
+
+let opcionesPredefinidas = {};
+
+fetch("presets.json")
   .then(res => res.json())
   .then(data => {
-    opcionesPredefinidas = data["preset1"];
-    document.getElementById('presets').value = opcionesPredefinidas.join(', ');
+    opcionesPredefinidas = data;
+    const select = document.getElementById("presetSelect");
+    for (const nombre in opcionesPredefinidas) {
+      const option = document.createElement("option");
+      option.value = nombre;
+      option.textContent = nombre;
+      select.appendChild(option);
+    }
   });
 
+function cambiarPreset(nombre) {
+  if (opcionesPredefinidas[nombre]) {
+    const textarea = document.getElementById("opciones");
+    textarea.value = opcionesPredefinidas[nombre].join(", ");
+  }
+}
 
     const voiceSelect = document.getElementById("voiceSelect");
     const volumenSlider = document.getElementById("volumen");
@@ -131,21 +151,12 @@ fetch("opciones.json")
     let currentUtterance;
     let ttsTimeout = null;
 
-    window.onload = () => {
-      document.getElementById('opciones').value = opcionesPredefinidas.join(', ');
-      cargarVoces();
-      if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = cargarVoces;
-      }
-    };
-
 
       function actualizarZoomFactor() {
     const zoom = window.outerWidth / window.innerWidth;
     document.documentElement.style.setProperty('--zoom-factor', zoom);
   }
 
-  // Ejecutar al cargar y al cambiar el tamaño
   actualizarZoomFactor();
   window.addEventListener('resize', actualizarZoomFactor);
 
@@ -154,7 +165,7 @@ fetch("opciones.json")
   const audio = document.getElementById('pawma');
 
   img.addEventListener('click', () => {
-    audio.currentTime = 0; // reinicia desde el inicio
+    audio.currentTime = 0;
     audio.play();
   });
 
@@ -165,7 +176,7 @@ fetch("opciones.json")
       audioGato.play();
     });
 
-          const pinchePendejo = document.getElementById("pendejo"); // tu elemento <audio>
+          const pinchePendejo = document.getElementById("pendejo"); 
           let reproduciendo = false;
 
         document.getElementById("pinche-pendejo").addEventListener("click", () => {
@@ -219,7 +230,6 @@ fetch("opciones.json")
         return;
       }
         
-      // Detener TTS anterior si está activo
       if (speechSynthesis.speaking) {
                 speechSynthesis.cancel();
       }
@@ -235,7 +245,6 @@ fetch("opciones.json")
       const resultadoTexto = elegidas.map((op, i) => `${i + 1}. ${op}`).join('<br>');
       document.getElementById('resultado').innerHTML = `✅ chingaderas elegidas:<br>${resultadoTexto}`;
 
-      // Generar texto hablado
       let mensajeTexto = "  chingaderas para elegir, ";
       if (elegidas.length === 1) {
         mensajeTexto += elegidas[0];
