@@ -130,16 +130,15 @@ fetch("presets.json")
   .then(data => {
     opcionesPredefinidas = data;
     const select = document.getElementById("presetSelect");
-    
     for (const nombre in opcionesPredefinidas) {
       const option = document.createElement("option");
       option.value = nombre;
       option.textContent = nombre;
       select.appendChild(option);
     }
-    
+  });
 
-    function cambiarPreset(nombre) {
+function cambiarPreset(nombre) {
   if (opcionesPredefinidas[nombre]) {
     const textarea = document.getElementById("opciones");
     textarea.value = opcionesPredefinidas[nombre].join(", ");
