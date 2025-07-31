@@ -131,18 +131,18 @@ fetch("presets.json")
     opcionesPredefinidas = data;
     const select = document.getElementById("presetSelect");
     
-    let primerNombre = null;
+    let preset1 = null;
     for (const nombre in opcionesPredefinidas) {
-      if (!primerNombre) primerNombre = nombre
+      if (!preset1) preset1 = nombre
       const option = document.createElement("option");
       option.value = nombre;
       option.textContent = nombre;
       select.appendChild(option);
     }
     
-    if (primerNombre) {
-      select.value = primerNombre;
-      cambiarPreset(primerNombre);
+    if (preset1) {
+      select.value = preset1;
+      cambiarPreset(preset1);
     }
   });
 
