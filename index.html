@@ -113,83 +113,16 @@
                      <source src="multimedia/bob_poronga.ogg" type="audio/mpeg"> 
 
   <script>
-    // Lista de opciones predefinidas
-    const opcionesPredefinidas = [
-        "absol",
-        "ardillota",
-        "armarouge",
-        "ay mister maim",
-        "ay snorlas",
-        "azumais",
-        "blastos",
-        "blazzercken",
-        "blisi",
-        "bodrio",
-        "caballo omosesual delas montañas",
-        "cerraora",
-        "chandelurs",
-        "chaneke",
-        "chari-pocion",
-        "chiclosa",
-        "chupadora",
-        "cindesex",
-        "clefa",
-        "cramoran",
-        "crustacio cascarudo",
-        "cumfi",
-        "delfos",
-        "dragonais",
-        "durnalgon",
-        "el mamo",
-        "eldedGOGOGO",
-        "espion",
-        "falinks",
-        "fierrudo",
-        "garchon de tierra",
-        "gardevoid",
-        "gayardos",
-        "glazioin",
-        "grenigga",
-        "gudrosa",
-        "hoo-too",
-        "jupa",
-        "lapras",
-        "latios",
-        "lifion",
-        "lucario",
-        "machamp",
-        "main gata desde la beta",
-        "metamelgrueso",
-        "miraidon",
-        "miu",
-        "miutu-X",
-        "miutu-Y", 
-        "naintels",
-        "Narkrai",
-        "Nceruledge",
-        "Nengar",
-        "Numbreon",
-        "Nzoroark",
-        "patadas locas",
-        "pistacho de alola",
-        "pistachu oscuro",
-        "pistachus",
-        "psidick",
-        "sexczor",
-        "silbeon",
-        "sniper monki vercion veracruz",
-        "sniper monki vercion yucateca",
-        "soicuno",
-        "talonflamas",
-        "tinkaton",
-        "tiranitar jungla",
-        "tragacum",
-        "troncosote",
-        "urchifu",
-        "venosa",
-        "willytuf",
-        "zaciano",
-         ];
+
+    
+let opcionesPredefinidas = [];
+
+fetch("opciones.json")
+  .then(res => res.json())
+  .then(data => {
+    opcionesPredefinidas = data["preset1"];
+    document.getElementById('presets').value = opcionesPredefinidas.join(', ');
+  });
 
 
     const voiceSelect = document.getElementById("voiceSelect");
