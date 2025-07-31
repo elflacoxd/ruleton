@@ -148,7 +148,8 @@ function cambiarPreset(nombre) {
     const voiceSelect = document.getElementById("voiceSelect");
     const volumenSlider = document.getElementById("volumen");
     let currentUtterance;
-    let ttsTimeout = null;
+    let ttsTimeout = null;  
+    let voices = [];
 
 
       function actualizarZoomFactor() {
@@ -191,8 +192,6 @@ function cambiarPreset(nombre) {
           }
         });
     
-let voices = [];
-const voiceSelect = document.getElementById("voiceSelect");
 function cargarVoces() {
   voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith("es"));
   voiceSelect.innerHTML = "";
