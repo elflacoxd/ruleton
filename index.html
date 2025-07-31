@@ -98,11 +98,11 @@
 
   <div id="resultado"></div>
 
-  <img src="https://cdn.discordapp.com/attachments/1177355673890201671/1399836914479140945/30_sin_titulo_20240609151305.png?ex=688a7338&is=688921b8&hm=3aa1340a6a8f5f89507912d3afdca92ff1c98a7e7f3588a9ce6dd3192b0ec290&" id="imagen-movil" style="cursor: pointer;">
+  <img src="https://cdn.discordapp.com/attachments/1177355673890201671/1399836914479140945/30_sin_titulo_20240609151305.png?ex=688a7338&is=688921b8&hm=3aa1340a6a8f5f89507912d3afdca92ff1c98a7e7f3588a9ce6dd3192b0ec290&" id="pawma-img" style="cursor: pointer;">
     <img src="https://cdn.7tv.app/emote/01JB0G5R1FY3NTAVG8CK3YCVCB/4x.avif" id="pinche-pendejo" style="cursor: pointer;">
 
-    <audio id="sonido">
-      <source src="https://cdn.discordapp.com/attachments/1177355673890201671/1399842674000793870/Pawma_1.mp3?ex=688a7895&is=68892715&hm=46eb5ad777a2bf6b940d5f6f563e48fe93a5f7cf1fb4a3bc047da88ac6c6bbde&" type="audio/mpeg">
+    <audio id="pawma">
+      <source src="multimedia/pawma.mp3" type="audio/mpeg">
     
         <audio id="sonido-gato">
            <source src="https://cdn.discordapp.com/attachments/1177355673890201671/1399850720018174002/gatooooo.ogg?ex=688a8013&is=68892e93&hm=02674e39e1aaa3b55c0f0ec08c6154184431c58c29cbe36a2bea75de3c385f09&" type="audio/mpeg"> 
@@ -217,8 +217,8 @@
   window.addEventListener('resize', actualizarZoomFactor);
 
 
-  const img = document.getElementById('imagen-movil');
-  const audio = document.getElementById('sonido');
+  const img = document.getElementById('pawma-img');
+  const audio = document.getElementById('pawma');
 
   img.addEventListener('click', () => {
     audio.currentTime = 0; // reinicia desde el inicio
