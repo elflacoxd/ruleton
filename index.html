@@ -147,7 +147,6 @@ function cambiarPreset(nombre) {
 
     const voiceSelect = document.getElementById("voiceSelect");
     const volumenSlider = document.getElementById("volumen");
-    let voices = [];
     let currentUtterance;
     let ttsTimeout = null;
 
@@ -191,7 +190,8 @@ function cambiarPreset(nombre) {
             reproduciendo = false;
           }
         });
-
+    
+let voices = [];
 const voiceSelect = document.getElementById("voiceSelect");
 function cargarVoces() {
   voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith("es"));
