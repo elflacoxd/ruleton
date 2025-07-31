@@ -137,6 +137,12 @@ fetch("presets.json")
       select.appendChild(option);
     }
   });
+    
+    if (preset1) {
+      select.value = preset1;
+      cambiarPreset(preset1);
+    }
+  });
 
 function cambiarPreset(nombre) {
   if (opcionesPredefinidas[nombre]) {
@@ -192,7 +198,6 @@ function cambiarPreset(nombre) {
           }
         });
 
-let voices = [];
 const voiceSelect = document.getElementById("voiceSelect");
 
 function cargarVoces() {
