@@ -67,7 +67,6 @@
       transform-origin: bottom right;
       will-change: transform;
       z-index: 9999;
-      animation: haciaCentro 2s ease-out forwards;
     }
      #pinche-pendejo {
       position: fixed;
@@ -78,7 +77,6 @@
       transform-origin: bottom left;
       will-change: transform;
       z-index: 9999;
-      animation: haciaCentro 2s ease-out forwards;
     }
 
   </style>
@@ -120,10 +118,18 @@
 
   <script>
 
+    const audioGato = document.getElementById("sonido-gato");
+    const pawmaImg = document.getElementById('pawma-img');
+    const pawmaMp3 = document.getElementById('pawma');
+    const pinchePendejo = document.getElementById("pendejo"); 
+    const voiceSelect = document.getElementById("voiceSelect");
+    const volumenSlider = document.getElementById("volumen");
     
-
-
-let opcionesPredefinidas = {};
+    let currentUtterance;
+    let ttsTimeout = null;  
+    let voices = [];
+    let reproduciendo = false;
+    let opcionesPredefinidas = {};
 
 fetch("presets.json")
   .then(res => res.json())
@@ -152,12 +158,6 @@ function cambiarPreset(nombre) {
   }
 }
 
-    const voiceSelect = document.getElementById("voiceSelect");
-    const volumenSlider = document.getElementById("volumen");
-    let currentUtterance;
-    let ttsTimeout = null;  
-    let voices = [];
-
 
       function actualizarZoomFactor() {
     const zoom = window.outerWidth / window.innerWidth;
@@ -167,24 +167,17 @@ function cambiarPreset(nombre) {
   actualizarZoomFactor();
   window.addEventListener('resize', actualizarZoomFactor);
 
-
-  const img = document.getElementById('pawma-img');
-  const audio = document.getElementById('pawma');
-
-  img.addEventListener('click', () => {
-    audio.currentTime = 0;
-    audio.play();
-  });
-
-        document.getElementById("gato").addEventListener("click", () => {
-      const audioGato = document.getElementById("sonido-gato");
-      audioGato.volume = 0.2;
-      audioGato.currentTime = 0;
-      audioGato.play();
-    });
-
-          const pinchePendejo = document.getElementById("pendejo"); 
-          let reproduciendo = false;
+    
+            pawmaImg.addEventListener('click', () => {
+          pawmaMp3.currentTime = 0;
+          pawmaMp3.play();
+        });
+  
+            document.getElementById("gato").addEventListener("click", () => {
+          audioGato.volume = 0.2;
+          audioGato.currentTime = 0;
+          audioGato.play();
+        });
 
         document.getElementById("pinche-pendejo").addEventListener("click", () => {
           if (!reproduciendo) {
@@ -217,7 +210,6 @@ speechSynthesis.onvoiceschanged = cargarVoces;
       const bobPoronga = document.getElementById("bob");
       const texto = document.getElementById('opciones').value.trim();
       const cantidad = parseInt(document.getElementById('cantidad').value);
-    
             
       bobPoronga.currentTime = 0;
       bobPoronga.play();
@@ -278,3 +270,4 @@ speechSynthesis.onvoiceschanged = cargarVoces;
   </script>
 </body>
 </html>
+
