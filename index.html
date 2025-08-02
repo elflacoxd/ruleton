@@ -27,7 +27,8 @@
       border: 1px solid #444;
     }
     input[type="number"], select, input[type="range"] {
-      font-size: 16px;
+      font-size: 12px;
+      max-width: 100px;
       margin: 5px;
     }
     button {
@@ -88,32 +89,98 @@
       transform-origin: bottom left;
       will-change: transform;
       z-index: 9999;
-
     }
+
+@media (max-width: 768px) {
+      textarea {
+      width: 80%;
+      height: 111px;
+      font-size: 16px;
+      background-color: #303030;
+      color: #827154;
+      border: 1px solid #444;
+    }
+      #pawma-img {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 150px;
+      transform: scale(calc(1 / var(--zoom-factor, 1)));
+      transform-origin: bottom right;
+      will-change: transform;
+      z-index: 9999;
+      }
+     #flameadas {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      top: 400px;
+      width: 120px;
+      transform: scale(calc(1 / var(--zoom-factor, 1)));
+      transform-origin: bottom left;
+      will-change: transform;
+      z-index: 9999;
+  }
+     #pinche-pendejo {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 120px;
+      transform: scale(calc(1 / var(--zoom-factor, 1)));
+      transform-origin: bottom left;
+      will-change: transform;
+      z-index: 9999;
+    }
+
+  .solo-pc {
+    display: none;
+  }
+
+  body {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+.solo-pc {
+  display: block;
+}
+.solo-movil {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .solo-pc {
+    display: none;
+  }
+  .solo-movil {
+    display: block;
+  }
+}
 
 
   </style>
 </head>
 <body>
+
   <div class="top-right">
     <button style="background-color: #00000000; color: #876445; border-color: #00000000;" button onclick="toggleTheme()">🌙/☀️</button>
   </div>
 
-  <h1><span id="gato">🐈‍⬛</span> chingadera para elegir chingaderas alazar</h1>
-  <p>Opciones (separadas por comas):</p>
-  <textarea id="opciones"></textarea>
-  <br><br>
-  <label for="cantidad">¿Cuántas chingaderas elegir?</label>
-  <input style="background-color: #10ac858b; color: #ffb030;" input type="number" id="cantidad" min="1" value="1">
+  <h2><span id="gato">🐈‍⬛</span> chingadera para elegir chingaderas alazar</h2>
+    <p>Opciones (separadas por comas):</p>
+      <textarea id="opciones"></textarea>
+         <br><br>
+            <label for="cantidad">¿Cuántas chingaderas elegir?</label>
+              <input style="background-color: #10ac858b; color: #ffb030;" input type="number" id="cantidad" min="1" value="1">
 
   <div class="controls">
     <input type="range" id="volumen" min="0" max="1.5" step="0.01" value="1">
-    <select style="background-color: #10ac858b; color: #ca8414;" select id="voiceSelect"></select>
-  </div>
+      <select style="background-color: #10ac858b; color: #ca8414;" select id="voiceSelect"></select>
+        </div>
 
   <button style="background-color: #10ac858b; color: #ffb030;" button onclick="elegirOpciones()">Picamela</button>
-
-  <div id="resultado"></div>
+    <div id="resultado"></div>
 
   <img src="multimedia/pawma_img.png" id="pawma-img" style="cursor: pointer;">
     <img src="multimedia/pinchependejo_avf.avif" id="pinche-pendejo" style="cursor: pointer;">
@@ -201,7 +268,7 @@
         document.getElementById("pinche-pendejo").addEventListener("click", () => {
           if (!reproduciendo) {
             pinchePendejo.currentTime = 0;
-            pinchePendejo.volume = 0.5;
+            pinchePendejo.volume = 0.7;
             pinchePendejo.play();
             reproduciendo = true;
           } else {
@@ -214,7 +281,7 @@
         document.getElementById("flameadas").addEventListener("click", () => {
           if (!reproduciendo) {
             flamaspuntocom.currentTime = 0;
-            flamaspuntocom.volume = 0.5;
+            flamaspuntocom.volume = 0.9;
             flamaspuntocom.play();
             reproduciendo = true;
           } else {
@@ -278,7 +345,7 @@
       const resultadoTexto = elegidas.map((op, i) => `${i + 1}. ${op}`).join('<br>');
       document.getElementById('resultado').innerHTML = `✅ chingaderas elegidas:<br>${resultadoTexto}`;
 
-      let mensajeTexto = "  chingaderas para elegir, ";
+      let mensajeTexto = "chingaderas para elegir, ";
       if (elegidas.length === 1) {
         mensajeTexto += elegidas[0];
       } else {
@@ -303,4 +370,3 @@
   </script>
 </body>
 </html>
-
