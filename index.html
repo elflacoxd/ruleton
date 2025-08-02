@@ -78,6 +78,19 @@
       will-change: transform;
       z-index: 9999;
     }
+     #flameadas {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      top: 240px;
+      width: 150px;
+      transform: scale(calc(1 / var(--zoom-factor, 1)));
+      transform-origin: bottom left;
+      will-change: transform;
+      z-index: 9999;
+
+    }
+
 
   </style>
 </head>
@@ -95,7 +108,7 @@
 
   <div class="controls">
     <input type="range" id="volumen" min="0" max="1.5" step="0.01" value="1">
-    <select style="background-color: #10ac858b; color: #ffb030;" select id="voiceSelect"></select>
+    <select style="background-color: #10ac858b; color: #ca8414;" select id="voiceSelect"></select>
   </div>
 
   <button style="background-color: #10ac858b; color: #ffb030;" button onclick="elegirOpciones()">Picamela</button>
@@ -104,6 +117,7 @@
 
   <img src="multimedia/pawma_img.png" id="pawma-img" style="cursor: pointer;">
     <img src="multimedia/pinchependejo_avf.avif" id="pinche-pendejo" style="cursor: pointer;">
+       <img src="multimedia/flamas777_webp.webp" id="flameadas" style="cursor: pointer;">
 
     <audio id="pawma">
       <source src="multimedia/pawma.mp3" type="audio/mpeg">
@@ -113,14 +127,19 @@
 
               <audio id="pendejo">
                 <source src="multimedia/pinchependejo.mp3" type="audio/mpeg"> 
+
                   <audio id="bob">
                      <source src="multimedia/bob_poronga.ogg" type="audio/mpeg"> 
+
+                        <audio id="flamas">   
+                            <source src="multimedia/flamas777.ogg" type="audio/mpeg"> 
 
   <script>
 
     const audioGato = document.getElementById("sonido-gato");
     const pawmaImg = document.getElementById('pawma-img');
     const pawmaMp3 = document.getElementById('pawma');
+    const flamaspuntocom = document.getElementById('flamas');
     const pinchePendejo = document.getElementById("pendejo"); 
     const voiceSelect = document.getElementById("voiceSelect");
     const volumenSlider = document.getElementById("volumen");
@@ -131,32 +150,32 @@
     let reproduciendo = false;
     let opcionesPredefinidas = {};
 
-fetch("presets.json")
-  .then(res => res.json())
-  .then(data => {
-    opcionesPredefinidas = data;
-    const select = document.getElementById("presetSelect");
+  fetch("presets.json")
+    .then(res => res.json())
+    .then(data => {
+      opcionesPredefinidas = data;
+      const select = document.getElementById("presetSelect");
 
-    let primerNombre = null;
-    for (const nombre in opcionesPredefinidas) {
-       if (!primerNombre) primerNombre = nombre;
-       const option = document.createElement("option");
-      option.value = nombre;
-      option.textContent = nombre;
-      select.appendChild(option);
-    }
-        if (primerNombre) {
-      select.value = primerNombre;
-      cambiarPreset(primerNombre);
-    }
-  });
+      let primerNombre = null;
+      for (const nombre in opcionesPredefinidas) {
+        if (!primerNombre) primerNombre = nombre;
+        const option = document.createElement("option");
+        option.value = nombre;
+        option.textContent = nombre;
+        select.appendChild(option);
+      }
+          if (primerNombre) {
+        select.value = primerNombre;
+        cambiarPreset(primerNombre);
+      }
+    });
 
-function cambiarPreset(nombre) {
-  if (opcionesPredefinidas[nombre]) {
-    const textarea = document.getElementById("opciones");
-    textarea.value = opcionesPredefinidas[nombre].join(", ");
+  function cambiarPreset(nombre) {
+    if (opcionesPredefinidas[nombre]) {
+      const textarea = document.getElementById("opciones");
+      textarea.value = opcionesPredefinidas[nombre].join(", ");
+    }
   }
-}
 
 
       function actualizarZoomFactor() {
@@ -167,8 +186,8 @@ function cambiarPreset(nombre) {
   actualizarZoomFactor();
   window.addEventListener('resize', actualizarZoomFactor);
 
-    
-            pawmaImg.addEventListener('click', () => {
+
+          pawmaImg.addEventListener('click', () => {
           pawmaMp3.currentTime = 0;
           pawmaMp3.play();
         });
@@ -192,19 +211,33 @@ function cambiarPreset(nombre) {
           }
         });
     
-function cargarVoces() {
-  voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith("es"));
-  voiceSelect.innerHTML = "";
-  voices.forEach((v, i) => {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = `${v.name} (${v.lang})`;
-    voiceSelect.appendChild(option);
-  });
-}
+        document.getElementById("flameadas").addEventListener("click", () => {
+          if (!reproduciendo) {
+            flamaspuntocom.currentTime = 0;
+            flamaspuntocom.volume = 0.5;
+            flamaspuntocom.play();
+            reproduciendo = true;
+          } else {
+            flamaspuntocom.pause();
+            flamaspuntocom.currentTime = 0;
+            reproduciendo = false;
+          }
+        });
 
-cargarVoces();
-speechSynthesis.onvoiceschanged = cargarVoces;
+
+  function cargarVoces() {
+    voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith("es"));
+    voiceSelect.innerHTML = "";
+    voices.forEach((v, i) => {
+      const option = document.createElement("option");
+      option.value = i;
+      option.textContent = `${v.name} (${v.lang})`;
+      voiceSelect.appendChild(option);
+    });
+  }
+
+  cargarVoces();
+  speechSynthesis.onvoiceschanged = cargarVoces;
 
     function elegirOpciones() {
       const bobPoronga = document.getElementById("bob");
