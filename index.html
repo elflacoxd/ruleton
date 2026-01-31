@@ -91,73 +91,49 @@
       z-index: 9999;
     }
 
-@media (max-width: 782px) {
-      textarea {
-      width: 80%;
-      height: 111px;
-      font-size: 16px;
-      background-color: #303030;
-      color: #827154;
-      border: 1px solid #444;
-    }
-      #pawma-img {
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      width: 150px;
-      transform: scale(calc(1 / var(--zoom-factor, 1)));
-      transform-origin: bottom right;
-      will-change: transform;
-      z-index: 9999;
-      }
-     #flameadas {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      top: 400px;
-      width: 120px;
-      transform: scale(calc(1 / var(--zoom-factor, 1)));
-      transform-origin: bottom left;
-      will-change: transform;
-      z-index: 9999;
-  }
-     #pinche-pendejo {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 120px;
-      transform: scale(calc(1 / var(--zoom-factor, 1)));
-      transform-origin: bottom left;
-      will-change: transform;
-      z-index: 9999;
-    }
-
-  .solo-pc {
-    display: none;
-  }
-
-  body {
-    font-size: 16px;
-    padding: 10px;
-  }
-}
-
 .solo-pc {
   display: block;
 }
+
 .solo-movil {
   display: none;
 }
 
-@media (max-width: 782px) {
-  .solo-pc {
-    display: none;
-  }
-  .solo-movil {
-    display: block;
-  }
+/* ===== MODO POR ESCALA ===== */
+
+.modo-movil .solo-pc {
+  display: none;
 }
 
+.modo-movil .solo-movil {
+  display: block;
+}
+
+.modo-pc .solo-movil {
+  display: none;
+}
+
+.modo-pc .solo-pc {
+  display: block;
+}
+
+/* ajustes visuales en móvil */
+.modo-movil textarea {
+  height: 111px;
+}
+
+.modo-movil #pawma-img {
+  width: 150px;
+}
+
+.modo-movil #pinche-pendejo {
+  width: 120px;
+}
+
+.modo-movil #flameadas {
+  top: 400px;
+  width: 120px;
+}
 
   </style>
 </head>
@@ -211,36 +187,69 @@
     const voiceSelect = document.getElementById("voiceSelect");
     const volumenSlider = document.getElementById("volumen");
     
+    const DEBUG_USAR_JSON_EMBEBIDO = false;
+
     let currentUtterance;
     let ttsTimeout = null;  
     let voices = [];
     let reproduciendo = false;
     let opcionesPredefinidas = {};
 
-  fetch("presets.json")
-    .then(res => res.json())
-    .then(data => {
-      opcionesPredefinidas = data;
-      const select = document.getElementById("presetSelect");
+  const PRESETS_DEBUG = {
 
-      let primerNombre = null;
-      for (const nombre in opcionesPredefinidas) {
-        if (!primerNombre) primerNombre = nombre;
-        const option = document.createElement("option");
-        option.value = nombre;
-        option.textContent = nombre;
-        select.appendChild(option);
-      }
-          if (primerNombre) {
-        select.value = primerNombre;
-        cambiarPreset(primerNombre);
-      }
-    });
+  };
+
+  function cargarPresets() {
+    if (DEBUG_USAR_JSON_EMBEBIDO) {
+      console.warn("⚠️ MODO DEBUG: usando presets embebidos");
+      inicializarPresets(PRESETS_DEBUG);
+    } else {
+      fetch("presets.json")
+        .then(res => {
+          if (!res.ok) throw new Error("No se pudo cargar presets.json");
+          return res.json();
+        })
+        .then(data => inicializarPresets(data))
+        .catch(err => {
+          console.error(err);
+          alert("❌ Error cargando presets.json");
+        });
+    }
+  }
 
   function cambiarPreset(nombre) {
-    if (opcionesPredefinidas[nombre]) {
-      const textarea = document.getElementById("opciones");
-      textarea.value = opcionesPredefinidas[nombre].join(", ");
+    const preset = opcionesPredefinidas[nombre];
+    if (!preset) return;
+
+    const textarea = document.getElementById("opciones");
+
+    if (Array.isArray(preset)) {
+      textarea.value = preset.join(", ");
+    } else {
+      textarea.value = preset; // data es string
+    }
+  }
+
+
+  function inicializarPresets(data) {
+    opcionesPredefinidas = data;
+    const select = document.getElementById("presetSelect");
+    select.innerHTML = "";
+
+    let primerNombre = null;
+
+    for (const nombre in opcionesPredefinidas) {
+      if (!primerNombre) primerNombre = nombre;
+
+      const option = document.createElement("option");
+      option.value = nombre;
+      option.textContent = nombre;
+      select.appendChild(option);
+    }
+
+    if (primerNombre) {
+      select.value = primerNombre;
+      cambiarPreset(primerNombre);
     }
   }
 
@@ -250,10 +259,48 @@
     document.documentElement.style.setProperty('--zoom-factor', zoom);
   }
 
+
+  function obtenerEscalaReal() {
+    const viewportScale = window.visualViewport?.scale ?? 1;
+    const windowScale = window.outerWidth / window.innerWidth;
+    const dpr = window.devicePixelRatio || 1;
+
+    return Math.max(viewportScale, windowScale, dpr);
+  }
+
+  function esModoMovil() {
+    const escala = obtenerEscalaReal();
+    const esTouch = navigator.maxTouchPoints > 0;
+    const esUA_Movil = /Android|iPhone|iPad/i.test(navigator.userAgent);
+
+    return (
+      escala >= 1.45 ||   // ← antes 1.6
+      esTouch ||          // pantallas táctiles
+      esUA_Movil          // emulación / móvil real
+    );
+  }
+
+  function actualizarModoPorEscala() {
+    const movil = esModoMovil();
+
+    document.body.classList.toggle("modo-movil", movil);
+    document.body.classList.toggle("modo-pc", !movil);
+
+    console.log(
+      "📱 modo:", movil ? "móvil" : "PC",
+      "| escala:", obtenerEscalaReal().toFixed(2)
+    );
+  }
+
   actualizarZoomFactor();
   window.addEventListener('resize', actualizarZoomFactor);
 
+  actualizarModoPorEscala();
 
+  window.addEventListener("resize", actualizarModoPorEscala);
+  window.visualViewport?.addEventListener("resize", actualizarModoPorEscala);
+
+  
           pawmaImg.addEventListener('click', () => {
           pawmaMp3.currentTime = 0;
           pawmaMp3.play();
@@ -367,6 +414,9 @@
     function toggleTheme() {
       document.body.classList.toggle("light-mode");
     }
+
+  cargarPresets();
+
   </script>
 </body>
 
